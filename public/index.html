@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <title>Encrypto/Decrypto Page</title>
+</head>
+
+<body>
+<div class="container">
+    <h1 class="text-center my-5">伪·加密通话 ^_^</h1>
+    <div class="form-group">
+        <label for="key">你们的密码:</label>
+        <input type="text" class="form-control" id="key" placeholder="不要告诉任何第三方哦～">
+    </div>
+    <div class="form-group">
+        <label for="input">你的密文或明文哦:</label>
+        <textarea class="form-control" id="input" rows="3" placeholder="快输进来！"></textarea>
+    </div>
+    <div class="form-group text-center my-5">
+        <button type="button" class="btn btn-primary mx-3" id="encrypt-button">加密！</button>
+        <button type="button" class="btn btn-primary mx-3" id="decrypt-button">解密！</button>
+    </div>
+    <div class="form-group">
+        <label for="output">这里是结果，点击就可以复制哦！</label>
+        <textarea class="form-control" id="output" rows="3" readonly></textarea>
+    </div>
+</div>
+<script>
+    // Add click event listeners to encrypt and decrypt buttons
+    $("#encrypt-button").click(function () {
+        // Get the key and input values
+        const jsonData = {};
+        jsonData["key"] = $("#key").val();
+        jsonData["input"] = $("#input").val();
+
+        fetch("/encrypt", {
+            method: "POST",
+            body: JSON.stringify(jsonData)
+        }).then(function (response) {
+            return response.text();
+        }).then(function (text) {
+            $("#output").val(text);
+        });
+    });
+    $("#decrypt-button").click(function () {
+        // Get the key and input values
+        const jsonData = {};
+        jsonData["key"] = $("#key").val();
+        jsonData["input"] = $("#input").val();
+
+        fetch("/decrypt", {
+            method: "POST",
+            body: JSON.stringify(jsonData)
+        }).then(function (response) {
+            return response.text();
+        }).then(function (text) {
+            $("#output").val(text);
+        });
+    });
+    // Add a click event listener to the output textarea to allow copying
+    $("#output").click(function () {
+        this.select();
+        document.execCommand("copy");
+    });
+</script>
+
+</body>
+
+</html>
